@@ -15,6 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Data\valid-guesses.txt" />
+    <None Remove="Data\wordle-dictionary.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\valid-guesses.txt" />
+    <EmbeddedResource Include="Data\wordle-dictionary.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Vestaboard.Common\Vestaboard.Common.csproj" />
   </ItemGroup>
 

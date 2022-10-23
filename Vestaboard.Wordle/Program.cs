@@ -58,7 +58,7 @@ internal static class Program
             })
             .Configure((context, builder) =>
             {
-                PhysicalFileProvider fileProvider = new(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../../../../fe/out")));
+                PhysicalFileProvider fileProvider = new(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "fe/out")));
                 builder
                     .UseExceptionHandler(builder => builder.Run(async context =>
                     {
