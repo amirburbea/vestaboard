@@ -1,0 +1,12 @@
+@import '~@blueprintjs/core/lib/scss/variables';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  > :global(.#{$ns}-navbar) {
+    margin-bottom: $pt-navbar-height;
+  }
+}

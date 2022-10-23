@@ -1,0 +1,24 @@
+@import '~@blueprintjs/core/lib/scss/variables';
+@import '~normalize.css/normalize.css';
+@import 'blueprintjs';
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background-color: $dark-gray2;
+}
+
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+#root {
+  height: inherit;
+  -webkit-font-smoothing: subpixel-antialiased;
+}

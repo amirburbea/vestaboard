@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsxdev",
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "exclude": ["./lib/", "./node_modules/"],
+  "extends": "../tsconfig.base.json",
+  "references": [{ "path": "../objects" }]
+}

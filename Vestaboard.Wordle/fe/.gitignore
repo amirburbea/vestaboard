@@ -1,0 +1,11 @@
+lib/
+out/
+dist/
+build/
+node_modules/
+.DS_Store/
+.vs/
+.idea/
+*.tsbuildinfo
+yarn-error.log
+lerna-debug.log

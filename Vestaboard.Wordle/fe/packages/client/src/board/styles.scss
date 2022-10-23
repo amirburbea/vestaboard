@@ -1,0 +1,21 @@
+@import '~@blueprintjs/core/lib/scss/variables';
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  .row {
+    display: block;
+
+    > :global(.#{$ns}-button) {
+      width: 48px;
+      height: 48px;
+      margin: 2px;
+      pointer-events: none;
+    }
+  }
+
+  &.game-over {
+    opacity: 0.5;
+  }
+}
