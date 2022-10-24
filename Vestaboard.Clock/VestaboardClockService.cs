@@ -9,13 +9,13 @@ internal sealed class VestaboardClockService : IHostedService
 
     public VestaboardClockService(ITimeRenderer timeRenderer)
     {
-        this._timer = new Timer(delegate { this.RenderTime(); });
+        this._timer = new Timer(delegate { this.RenderTimeAsync(); });
         this._timeRenderer = timeRenderer;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await this.RenderTime(cancellationToken).ConfigureAwait(false);
+        await this.RenderTimeAsync(cancellationToken).ConfigureAwait(false);
         // Start at next minute but with 0 seconds, raise once per minute.
         this._timer.Change((int)Math.Floor(60d - DateTime.Now.Second) * 1000, 60000);
     }
@@ -26,7 +26,7 @@ internal sealed class VestaboardClockService : IHostedService
         return Task.CompletedTask;
     }
 
-    private Task RenderTime(CancellationToken cancellationToken = default)
+    private Task RenderTimeAsync(CancellationToken cancellationToken = default)
     {
         return this._timeRenderer.RenderTimeAsync(DateTime.Now, cancellationToken);
     }

@@ -15,12 +15,12 @@ public sealed class BoardClient : IBoardClient, IDisposable
     private static readonly MediaTypeHeaderValue _jsonContentType = MediaTypeHeaderValue.Parse("application/json");
 
     private readonly HttpClient _httpClient;
-    private readonly string _readWriteApiKey;
+    private readonly string _localApiKey;
 
     public BoardClient(HttpMessageHandler messageHandler, IConfiguration configuration)
     {
         this._httpClient = new(messageHandler);
-        this._readWriteApiKey = configuration["LOCAL_API_KEY"] ?? string.Empty;
+        this._localApiKey = configuration["LOCAL_API_KEY"] ?? throw new ArgumentException("Configuration does not contain local api key.", nameof(configuration));
     }
 
     public void Dispose() => _httpClient.Dispose();
@@ -33,7 +33,7 @@ public sealed class BoardClient : IBoardClient, IDisposable
         }
         using HttpRequestMessage request = new(HttpMethod.Post, "http://vestaboard.local:7000/local-api/message")
         {
-            Headers = { { "X-Vestaboard-Local-Api-Key", this._readWriteApiKey } },
+            Headers = { { "X-Vestaboard-Local-Api-Key", this._localApiKey } },
             Content = new ByteArrayContent(JsonSerializer.SerializeToUtf8Bytes(characters)) { Headers = { ContentType = BoardClient._jsonContentType } }
         };
         using HttpResponseMessage response = await this._httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
