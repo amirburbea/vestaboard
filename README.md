@@ -1,1 +1,1 @@
-# VestaboardWordle
+# Vestaboard
