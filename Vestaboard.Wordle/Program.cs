@@ -43,7 +43,7 @@ internal static class Program
             .ConfigureKestrel(options =>
             {
                 options.AddServerHeader = false;
-                options.ListenAnyIP(builder.GetSetting("PORT") is { Length: > 0 } text ? int.Parse(text) : 81);
+                options.ListenAnyIP(builder.GetSetting("PORT") is { Length: > 0 } text ? int.Parse(text) : 1234);
             })
             .ConfigureServices(services =>
             {

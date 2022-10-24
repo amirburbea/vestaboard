@@ -12,18 +12,18 @@
   "author": "Amir Burbea <amir.burbea@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@redux-devtools/extension": "^3.2.2",
+    "@redux-devtools/extension": "^3.2.3",
     "lodash": "^4.17.21",
     "redux": "^4.2.0",
     "redux-actions": "^2.6.5",
-    "redux-saga": "^1.1.3",
+    "redux-saga": "^1.2.1",
     "reselect": "^4.1.6"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
-    "@types/node": "^18.0.6",
+    "@types/lodash": "^4.14.186",
+    "@types/node": "^18.11.4",
     "@types/redux-actions": "^2.6.2",
     "shx": "^0.3.4",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.4"
   }
 }
