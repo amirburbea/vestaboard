@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace Vestaboard.Clock;
+namespace Vestaboard.WordClock;
 
-internal sealed class VestaboardClockService : IHostedService
+internal sealed class WordClockService : IHostedService
 {
     private readonly Timer _timer;
     private readonly ITimeRenderer _timeRenderer;
 
-    public VestaboardClockService(ITimeRenderer timeRenderer)
+    public WordClockService(ITimeRenderer timeRenderer)
     {
         this._timer = new Timer(delegate { this.RenderTimeAsync(); });
         this._timeRenderer = timeRenderer;

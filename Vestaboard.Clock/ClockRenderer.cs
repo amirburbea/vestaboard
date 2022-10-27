@@ -3,12 +3,12 @@ using Vestaboard.Common;
 
 namespace Vestaboard.Clock;
 
-public interface ITimeRenderer
+public interface IClockRenderer
 {
-    Task RenderTimeAsync(DateTime time, CancellationToken cancellationToken = default);
+    Task RenderClockAsync(DateTime time, CancellationToken cancellationToken = default);
 }
 
-internal sealed class TimeRenderer : ITimeRenderer
+internal sealed class ClockRenderer : IClockRenderer
 {
     private static readonly Number[] _numbers = {
         new Zero(),
@@ -25,14 +25,14 @@ internal sealed class TimeRenderer : ITimeRenderer
 
     private readonly IBoardClient _boardClient;
 
-    public TimeRenderer(IBoardClient boardClient)
+    public ClockRenderer(IBoardClient boardClient)
     {
         this._boardClient = boardClient;
     }
 
-    public Task RenderTimeAsync(DateTime time, CancellationToken cancellationToken)
+    public Task RenderClockAsync(DateTime time, CancellationToken cancellationToken)
     {
-        BoardCharacter[][] output = new BoardCharacter[][]
+        BoardCharacter[][] output = new[]
         {
             new BoardCharacter[22],
             new BoardCharacter[22],
@@ -56,7 +56,7 @@ internal sealed class TimeRenderer : ITimeRenderer
             RenderDigit(value / 10, startIndex);
             RenderDigit(value % 10, startIndex + 5);
 
-            void RenderDigit(int digit, int startIndex) => TimeRenderer._numbers[digit].Render(output, startIndex);
+            void RenderDigit(int digit, int startIndex) => ClockRenderer._numbers[digit].Render(output, startIndex);
         }
     }
 }

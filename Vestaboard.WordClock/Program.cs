@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Vestaboard.Common;
 
-namespace Vestaboard.Clock;
+namespace Vestaboard.WordClock;
 
 internal static class Program
 {
@@ -31,8 +31,8 @@ internal static class Program
     {
         services
             .AddSingleton<HttpMessageHandler, SocketsHttpHandler>()
-            .AddSingleton<IClockRenderer, ClockRenderer>()
+            .AddSingleton<ITimeRenderer, TimeRenderer>()
             .AddSingleton<IBoardClient, BoardClient>()
-            .AddHostedService<DigitalClockService>();
+            .AddHostedService<WordClockService>();
     }
 }

@@ -76,7 +76,7 @@ internal static class Program
     private static async Task Main()
     {
         using IHost host = new HostBuilder()
-            .ConfigureHostConfiguration(builder => builder.AddUserSecrets(typeof(Program).Assembly))
+            .ConfigureHostConfiguration(builder => builder.AddUserSecrets(typeof(IBoardClient).Assembly))
             .ConfigureWebHostDefaults(Program.ConfigureWebHostDefaults)
             .ConfigureLogging(Program.ConfigureLogging)
             .ConfigureServices(Program.ConfigureServices)
