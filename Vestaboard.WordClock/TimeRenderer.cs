@@ -9,9 +9,9 @@ public interface ITimeRenderer
 
 internal sealed class TimeRenderer : ITimeRenderer
 {
-    private static readonly Dictionary<int, string> _units = new()
+    private static readonly Dictionary<int, string> _text = new()
     {
-        [0] = "twelve",
+        [0] = "twelve", // Special edge case for 0 hour
         [1] = "one",
         [2] = "two",
         [3] = "three",
@@ -60,7 +60,7 @@ internal sealed class TimeRenderer : ITimeRenderer
         while (position < text.Length)
         {
             int endPosition = text.IndexOf(' ', position);
-            string word = endPosition is not -1 ? text[position..endPosition] : text[position..];
+            string word = text[position..(endPosition is not -1 ? endPosition : ^0)];
             if (word.Length + column > 22)
             {
                 row++;
@@ -77,8 +77,7 @@ internal sealed class TimeRenderer : ITimeRenderer
         {
             Fill(output[row].AsSpan(column));
         }
-        row++;
-        for (; row < 6; row++)
+        while (++row < 6)
         {
             Fill(output[row].AsSpan());
         }
@@ -92,15 +91,15 @@ internal sealed class TimeRenderer : ITimeRenderer
         int hour = time.Hour % 12;
         string timeText = time.Minute switch
         {
-            0 => $"{TimeRenderer._units[hour]} o'clock",
-            1 => $"{TimeRenderer._units[1]} minute past {TimeRenderer._units[hour]}",
-            15 or 30 => $"{TimeRenderer._units[time.Minute]} past {TimeRenderer._units[hour]}",
-            45 => $"{TimeRenderer._units[15]} to {TimeRenderer._units[(hour + 1) % 12]}",
-            59 => $"{TimeRenderer._units[1]} minute to {TimeRenderer._units[(hour + 1) % 12]}",
-            < 21 => $"{TimeRenderer._units[time.Minute]} minutes past {TimeRenderer._units[hour]}",
-            < 30 => $"{TimeRenderer._units[20]} {TimeRenderer._units[time.Minute % 10]} minutes past {TimeRenderer._units[hour]}",
-            < 40 => $"{TimeRenderer._units[20]} {TimeRenderer._units[(60 - time.Minute) % 10]} minutes to {TimeRenderer._units[(hour + 1) % 12]}",
-            _ => $"{TimeRenderer._units[60 - time.Minute]} minutes to {TimeRenderer._units[(hour + 1) % 12]}",
+            0 => $"{TimeRenderer._text[hour]} o'clock",
+            1 => $"{TimeRenderer._text[1]} minute past {TimeRenderer._text[hour]}",
+            15 or 30 => $"{TimeRenderer._text[time.Minute]} past {TimeRenderer._text[hour]}",
+            45 => $"{TimeRenderer._text[15]} to {TimeRenderer._text[(hour + 1) % 12]}",
+            59 => $"{TimeRenderer._text[1]} minute to {TimeRenderer._text[(hour + 1) % 12]}",
+            < 21 => $"{TimeRenderer._text[time.Minute]} minutes past {TimeRenderer._text[hour]}",
+            < 30 => $"{TimeRenderer._text[20]} {TimeRenderer._text[time.Minute % 10]} minutes past {TimeRenderer._text[hour]}",
+            < 40 => $"{TimeRenderer._text[20]} {TimeRenderer._text[(60 - time.Minute) % 10]} minutes to {TimeRenderer._text[(hour + 1) % 12]}",
+            _ => $"{TimeRenderer._text[60 - time.Minute]} minutes to {TimeRenderer._text[(hour + 1) % 12]}",
         };
         string timeOfDay = (time.Hour, time.Minute) switch
         {

@@ -106,15 +106,15 @@ internal sealed class Game
         {
             if (!this.IsOver)
             {
-                RenderSuffix(0, "GOOD");
-                RenderSuffix(1, "LUCK");
+                RenderSuffix(0, "Good");
+                RenderSuffix(1, "Luck");
             }
             else
             {
-                RenderSuffix(0, "YOU");
-                RenderSuffix(1, this.IsSolved ? "WIN" : "LOSE");
+                RenderSuffix(0, "You");
+                RenderSuffix(1, this.IsSolved ? "Win" : "Lose");
             }
-            RenderSuffix(4, "WORDLE");
+            RenderSuffix(4, "Wordle");
         }
         RenderSuffix(5, $"#{this.Id}");
         return rows;
@@ -124,7 +124,7 @@ internal sealed class Game
             BoardCharacter[] row = new BoardCharacter[22];
             if (this._guesses.Count == rowIndex && !this.IsSolved)
             {
-                row[0..5].AsSpan().Fill(BoardCharacter.QuestionMark);
+                row.AsSpan(0, 5).Fill(BoardCharacter.QuestionMark);
             }
             else if (this._guesses.Count > rowIndex)
             {
@@ -146,14 +146,14 @@ internal sealed class Game
         void RenderOnScreenKeyboard(int rowIndex)
         {
             BoardCharacter[] row = rows[rowIndex];
+            // Render 5 letters per row (or 1 for last row of just 'Z').
             int offset = rowIndex * 5;
-            // Render up to 5 letters for the onscreen keyboard.
-            for (int i = 0; i < 5 && (offset + i) < 26; i++)
+            for (int index = 0; index < 5 && (offset + index) < 26; index++)
             {
-                char character = (char)((int)'A' + offset + i);
-                row[12 + 2 * i] = BoardCharacters.Map[character];
-                row[13 + 2 * i] = this._keyColors.TryGetValue(character, out Color color)
-                    ? color == Color.None
+                char character = (char)((int)'A' + offset + index);
+                row[12 + 2 * index] = BoardCharacters.Map[character];
+                row[13 + 2 * index] = this._keyColors.TryGetValue(character, out Color color)
+                    ? color is Color.None
                         ? BoardCharacter.PoppyRed
                         : Game.GetCharacter(color)
                     : BoardCharacter.Hyphen;
@@ -163,9 +163,10 @@ internal sealed class Game
         void RenderSuffix(int rowIndex, string text)
         {
             BoardCharacter[] row = rows[rowIndex];
-            for (int i = 0; i < text.Length; i++)
+            for (int index = 0; index < text.Length; index++)
             {
-                row[row.Length - text.Length + i] = BoardCharacters.Map[text[i]];
+                char character = text[index];
+                row[row.Length - text.Length + index] = BoardCharacters.Map[character];
             }
         }
     }
@@ -228,13 +229,13 @@ internal sealed class Game
                 yellowCounts[character] = yellowCounts.TryGetValue(character, out int count) ? count + 1 : 1;
             }
         }
-        for (int i = 0; i < guess.Length; i++)
+        for (int index = 0; index < guess.Length; index++)
         {
-            if (previousColors[i] == Color.Green)
+            if (previousColors[index] == Color.Green)
             {
                 continue; // We coudn't be here if they don't match.
             }
-            char character = guess[i];
+            char character = guess[index];
             if (!yellowCounts.TryGetValue(character, out int count))
             {
                 continue;
