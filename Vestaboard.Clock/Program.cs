@@ -31,7 +31,7 @@ internal static class Program
     {
         services
             .AddSingleton<HttpMessageHandler, SocketsHttpHandler>()
-            .AddSingleton<ITimeRenderer, TimeRenderer>()
+            .AddSingleton<IClockRenderer, DigitalClockRenderer>()
             .AddSingleton<IBoardClient, BoardClient>()
             .AddHostedService<ClockService>();
     }

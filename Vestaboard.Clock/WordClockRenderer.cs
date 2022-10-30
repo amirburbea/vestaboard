@@ -1,13 +1,8 @@
 ﻿using Vestaboard.Common;
 
-namespace Vestaboard.WordClock;
+namespace Vestaboard.Clock;
 
-public interface ITimeRenderer
-{
-    Task RenderTimeAsync(DateTime time, CancellationToken cancellationToken = default);
-}
-
-internal sealed class TimeRenderer : ITimeRenderer
+internal sealed class WordClockRenderer : IClockRenderer
 {
     private static readonly Dictionary<int, string> _text = new()
     {
@@ -37,7 +32,7 @@ internal sealed class TimeRenderer : ITimeRenderer
 
     private readonly IBoardClient _boardClient;
 
-    public TimeRenderer(IBoardClient boardClient)
+    public WordClockRenderer(IBoardClient boardClient)
     {
         this._boardClient = boardClient;
     }
@@ -53,7 +48,7 @@ internal sealed class TimeRenderer : ITimeRenderer
             new BoardCharacter[22],
             new BoardCharacter[22]
         };
-        string text = TimeRenderer.ComposeSentence(time);
+        string text = WordClockRenderer.ComposeSentence(time);
         int row = 0; // output row index
         int column = 0; // output column index
         int position = 0; // text position
@@ -91,15 +86,15 @@ internal sealed class TimeRenderer : ITimeRenderer
         int hour = time.Hour % 12;
         string timeText = time.Minute switch
         {
-            0 => $"{TimeRenderer._text[hour]} o'clock",
-            1 => $"{TimeRenderer._text[1]} minute past {TimeRenderer._text[hour]}",
-            15 or 30 => $"{TimeRenderer._text[time.Minute]} past {TimeRenderer._text[hour]}",
-            45 => $"{TimeRenderer._text[15]} to {TimeRenderer._text[(hour + 1) % 12]}",
-            59 => $"{TimeRenderer._text[1]} minute to {TimeRenderer._text[(hour + 1) % 12]}",
-            < 21 => $"{TimeRenderer._text[time.Minute]} minutes past {TimeRenderer._text[hour]}",
-            < 30 => $"{TimeRenderer._text[20]} {TimeRenderer._text[time.Minute % 10]} minutes past {TimeRenderer._text[hour]}",
-            < 40 => $"{TimeRenderer._text[20]} {TimeRenderer._text[(60 - time.Minute) % 10]} minutes to {TimeRenderer._text[(hour + 1) % 12]}",
-            _ => $"{TimeRenderer._text[60 - time.Minute]} minutes to {TimeRenderer._text[(hour + 1) % 12]}",
+            0 => $"{WordClockRenderer._text[hour]} o'clock",
+            1 => $"{WordClockRenderer._text[1]} minute past {WordClockRenderer._text[hour]}",
+            15 or 30 => $"{WordClockRenderer._text[time.Minute]} past {WordClockRenderer._text[hour]}",
+            45 => $"{WordClockRenderer._text[15]} to {WordClockRenderer._text[(hour + 1) % 12]}",
+            59 => $"{WordClockRenderer._text[1]} minute to {WordClockRenderer._text[(hour + 1) % 12]}",
+            < 21 => $"{WordClockRenderer._text[time.Minute]} minutes past {WordClockRenderer._text[hour]}",
+            < 30 => $"{WordClockRenderer._text[20]} {WordClockRenderer._text[time.Minute % 10]} minutes past {WordClockRenderer._text[hour]}",
+            < 40 => $"{WordClockRenderer._text[20]} {WordClockRenderer._text[(60 - time.Minute) % 10]} minutes to {WordClockRenderer._text[(hour + 1) % 12]}",
+            _ => $"{WordClockRenderer._text[60 - time.Minute]} minutes to {WordClockRenderer._text[(hour + 1) % 12]}",
         };
         string timeOfDay = (time.Hour, time.Minute) switch
         {

@@ -4,20 +4,20 @@ namespace Vestaboard.Clock;
 
 internal sealed class ClockService : IHostedService
 {
-    private readonly ITimeRenderer _timeRenderer;
+    private readonly IClockRenderer _renderer;
     private readonly Timer _timer;
 
-    public ClockService(ITimeRenderer timeRenderer)
+    public ClockService(IClockRenderer renderer)
     {
-        this._timer = new Timer(delegate { this.RenderTimeAsync(); });
-        this._timeRenderer = timeRenderer;
+        this._timer = new Timer(delegate { this.RenderTimeAsync(default); });
+        this._renderer = renderer;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await this.RenderTimeAsync(cancellationToken).ConfigureAwait(false);
-        // Start at next minute but with 0 seconds, raise once per minute.
-        this._timer.Change((int)Math.Floor(60d - DateTime.Now.Second) * 1000, 60000);
+        // Start at next interval but with 0 seconds.
+        this.ChangeTimer(Minutes.One);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -26,8 +26,26 @@ internal sealed class ClockService : IHostedService
         return Task.CompletedTask;
     }
 
-    private Task RenderTimeAsync(CancellationToken cancellationToken = default)
+    private void ChangeTimer(Minutes interval)
     {
-        return this._timeRenderer.RenderTimeAsync(DateTime.Now, cancellationToken);
+        int secondsToNextMinute = (int)Math.Floor(60d - DateTime.Now.Second);
+        int minutes = (int)interval;
+        for (int i = 0; i < minutes; i++)
+        {
+            DateTime temp = DateTime.Now.AddSeconds(secondsToNextMinute).AddMinutes(i);
+            if (temp.Minute % minutes == 0)
+            {
+                this._timer.Change(temp - DateTime.Now, TimeSpan.FromMinutes(minutes));
+                return;
+            }
+        }
+    }
+
+    private Task RenderTimeAsync(CancellationToken cancellationToken) => this._renderer.RenderTimeAsync(DateTime.Now, cancellationToken);
+
+    enum Minutes
+    {
+        One = 1,
+        Five = 5
     }
 }
