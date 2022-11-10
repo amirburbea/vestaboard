@@ -206,7 +206,7 @@ public static class BoardCharacters
     );
 }
 
-file sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
+internal sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
 {
     public override bool Equals(char x, char y) => char.ToUpperInvariant(x) == char.ToUpperInvariant(y);
 
@@ -214,7 +214,7 @@ file sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
 }
 
 [AttributeUsage(AttributeTargets.Field)]
-file sealed class CharacterAttribute : Attribute
+internal sealed class CharacterAttribute : Attribute
 {
     public CharacterAttribute(char associatedCharacter) => this.AssociatedCharacter = associatedCharacter;
 
