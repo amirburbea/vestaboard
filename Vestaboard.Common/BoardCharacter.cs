@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace Vestaboard.Common;
@@ -201,17 +204,17 @@ public static class BoardCharacters
         select KeyValuePair.Create(attribute.AssociatedCharacter, (BoardCharacter)field.GetValue(null)!),
         new CaseInsensitiveCharacterComparer()
     );
+}
 
-    private sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
-    {
-        public override bool Equals(char x, char y) => char.ToUpperInvariant(x) == char.ToUpperInvariant(y);
+file sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
+{
+    public override bool Equals(char x, char y) => char.ToUpperInvariant(x) == char.ToUpperInvariant(y);
 
-        public override int GetHashCode(char obj) => char.ToUpperInvariant(obj);
-    }
+    public override int GetHashCode(char obj) => char.ToUpperInvariant(obj);
 }
 
 [AttributeUsage(AttributeTargets.Field)]
-internal sealed class CharacterAttribute : Attribute
+file sealed class CharacterAttribute : Attribute
 {
     public CharacterAttribute(char associatedCharacter) => this.AssociatedCharacter = associatedCharacter;
 
