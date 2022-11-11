@@ -195,7 +195,7 @@ public enum BoardCharacter
 
 public static class BoardCharacters
 {
-    public static readonly IReadOnlyDictionary<char, BoardCharacter> Map = ComputeCharacterMap();
+    public static readonly IReadOnlyDictionary<char, BoardCharacter> Map = BoardCharacters.ComputeCharacterMap();
 
     private static Dictionary<char, BoardCharacter> ComputeCharacterMap() => new(
         from field in typeof(BoardCharacter).GetFields(BindingFlags.Public | BindingFlags.Static)
@@ -204,13 +204,13 @@ public static class BoardCharacters
         select KeyValuePair.Create(attribute.AssociatedCharacter, (BoardCharacter)field.GetValue(null)!),
         new CaseInsensitiveCharacterComparer()
     );
-}
 
-internal sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
-{
-    public override bool Equals(char x, char y) => char.ToUpperInvariant(x) == char.ToUpperInvariant(y);
+    private sealed class CaseInsensitiveCharacterComparer : EqualityComparer<char>
+    {
+        public override bool Equals(char x, char y) => char.ToUpperInvariant(x) == char.ToUpperInvariant(y);
 
-    public override int GetHashCode(char obj) => char.ToUpperInvariant(obj);
+        public override int GetHashCode(char obj) => char.ToUpperInvariant(obj);
+    }
 }
 
 [AttributeUsage(AttributeTargets.Field)]

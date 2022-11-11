@@ -84,7 +84,7 @@ internal sealed class Game
         for (int i = 0; i < guess.Length; i++)
         {
             char character = guess[i];
-            if (colors[i] != Color.Green && letterCounts.GetValueOrDefault(character) is int count and > 0)
+            if (colors[i] != Color.Green && letterCounts.GetValueOrDefault(character) is { } count and > 0)
             {
                 colors[i] = Color.Yellow;
                 letterCounts[character] = count - 1;
@@ -186,13 +186,13 @@ internal sealed class Game
         {
             Color color = colors[index];
             char character = guess[index];
-            if (!this._keyColors.TryGetValue(character, out Color existing))
+            if (this._keyColors.TryGetValue(character, out Color existing))
             {
-                this._keyColors.Add(character, color);
+                this._keyColors[character] = (Color)Math.Max((int)color, (int)existing);
             }
             else
             {
-                this._keyColors[character] = (Color)Math.Max((int)color, (int)existing);
+                this._keyColors.Add(character, color);
             }
         }
     }
