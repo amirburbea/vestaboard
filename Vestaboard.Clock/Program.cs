@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,7 @@ internal static class Program
     {
         services
             .AddSingleton<HttpMessageHandler, SocketsHttpHandler>()
-            .AddSingleton<IClockRenderer, DigitalClockRenderer>()
+            .AddSingleton<IClockRenderer, WordClockRenderer>()
             .AddSingleton<IBoardClient, BoardClient>()
             .AddHostedService<ClockService>();
     }

@@ -25,13 +25,11 @@ internal sealed class WordClockRenderer : IClockRenderer
         [12] = "twelve",
         [13] = "thirteen",
         [14] = "fourteen",
-        [15] = "a quarter",
         [16] = "sixteen",
         [17] = "seventeen",
         [18] = "eighteen",
         [19] = "nineteen",
         [20] = "twenty",
-        [30] = "half",
     };
 
     private readonly IBoardClient _boardClient;
@@ -41,7 +39,7 @@ internal sealed class WordClockRenderer : IClockRenderer
         this._boardClient = boardClient;
     }
 
-    public Task RenderTimeAsync(DateTime time, CancellationToken cancellationToken = default)
+    public Task RenderTimeAsync(TimeOnly time, CancellationToken cancellationToken = default)
     {
         BoardCharacter[][] output = new[]
         {
@@ -85,28 +83,28 @@ internal sealed class WordClockRenderer : IClockRenderer
         void Fill(Span<BoardCharacter> span) => span.Fill(row % 2 is 0 ? BoardCharacter.White : BoardCharacter.ParisBlue);
     }
 
-    private static string ComposeSentence(DateTime time)
+    private static string ComposeSentence(TimeOnly time)
     {
-        int hour = time.Hour % 12;
-        string timeText = time.Minute switch
+        int hour = time.AddHours(time.Minute > 30 ? 1d : 0d).Hour;
+        int displayedHour = hour % 12;
+        return $"it is {time.Minute switch
         {
-            0 => $"{WordClockRenderer._text[hour]} o'clock",
-            1 => $"{WordClockRenderer._text[1]} minute past {WordClockRenderer._text[hour]}",
-            15 or 30 => $"{WordClockRenderer._text[time.Minute]} past {WordClockRenderer._text[hour]}",
-            45 => $"{WordClockRenderer._text[15]} to {WordClockRenderer._text[(hour + 1) % 12]}",
-            59 => $"{WordClockRenderer._text[1]} minute to {WordClockRenderer._text[(hour + 1) % 12]}",
-            < 21 => $"{WordClockRenderer._text[time.Minute]} minutes past {WordClockRenderer._text[hour]}",
-            < 30 => $"{WordClockRenderer._text[20]} {WordClockRenderer._text[time.Minute % 10]} minutes past {WordClockRenderer._text[hour]}",
-            < 40 => $"{WordClockRenderer._text[20]} {WordClockRenderer._text[(60 - time.Minute) % 10]} minutes to {WordClockRenderer._text[(hour + 1) % 12]}",
-            _ => $"{WordClockRenderer._text[60 - time.Minute]} minutes to {WordClockRenderer._text[(hour + 1) % 12]}",
-        };
-        string timeOfDay = (time.Hour, time.Minute) switch
+            0 => $"{WordClockRenderer._text[displayedHour]} o'clock",
+            1 => $"one minute past {WordClockRenderer._text[displayedHour]}",
+            15 => $"quarter past {WordClockRenderer._text[displayedHour]}",
+            < 21 => $"{WordClockRenderer._text[time.Minute]} minutes past {WordClockRenderer._text[displayedHour]}",
+            < 30 => $"twenty {WordClockRenderer._text[time.Minute % 10]} minutes past {WordClockRenderer._text[displayedHour]}",
+            30 => $"half past {WordClockRenderer._text[displayedHour]}",
+            < 40 => $"twenty {WordClockRenderer._text[(60 - time.Minute) % 10]} minutes to {WordClockRenderer._text[displayedHour]}",
+            45 => $"quarter to {WordClockRenderer._text[displayedHour]}",
+            59 => $"one minute to {WordClockRenderer._text[displayedHour]}",
+            _ => $"{WordClockRenderer._text[60 - time.Minute]} minutes to {WordClockRenderer._text[displayedHour]}",
+        }} {hour switch
         {
-            ( < 11, _) or (11, <= 30) or (23, > 30) => "in the morning",
-            ( < 17, _) or (17, <= 30) => "in the afternoon",
-            ( < 20, _) or (20, <= 30) => "in the evening",
-            _ => "at night",
-        };
-        return $"it is {timeText} {timeOfDay}";
+            < 12 => "in the morning",
+            < 18 => "in the afternoon",
+            < 21 => "in the evening",
+            _ => "at night"
+        }}";
     }
 }

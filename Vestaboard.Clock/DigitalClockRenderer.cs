@@ -28,7 +28,7 @@ internal sealed class DigitalClockRenderer : IClockRenderer
         this._boardClient = boardClient;
     }
 
-    public Task RenderTimeAsync(DateTime time, CancellationToken cancellationToken)
+    public Task RenderTimeAsync(TimeOnly time, CancellationToken cancellationToken)
     {
         BoardCharacter[][] output = new[]
         {

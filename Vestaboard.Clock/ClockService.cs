@@ -44,7 +44,7 @@ internal sealed class ClockService : IHostedService
         }
     }
 
-    private Task RenderTimeAsync(CancellationToken cancellationToken) => this._renderer.RenderTimeAsync(DateTime.Now, cancellationToken);
+    private Task RenderTimeAsync(CancellationToken cancellationToken) => this._renderer.RenderTimeAsync(TimeOnly.FromDateTime(DateTime.Now), cancellationToken);
 
     enum Minutes
     {
