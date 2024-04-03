@@ -214,9 +214,7 @@ public static class BoardCharacters
 }
 
 [AttributeUsage(AttributeTargets.Field)]
-internal sealed class CharacterAttribute : Attribute
+internal sealed class CharacterAttribute(char associatedCharacter) : Attribute
 {
-    public CharacterAttribute(char associatedCharacter) => this.AssociatedCharacter = associatedCharacter;
-
-    public char AssociatedCharacter { get; }
+    public char AssociatedCharacter => associatedCharacter;
 }

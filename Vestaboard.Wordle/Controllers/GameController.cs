@@ -7,33 +7,26 @@ using Vestaboard.Wordle.Services;
 namespace Vestaboard.Wordle.Controllers;
 
 [ApiController, Route("api/[controller]")]
-public sealed class GameController : ControllerBase
+public sealed class GameController(IGameService gameService, ILogger<GameController> logger) : ControllerBase
 {
-    private readonly IGameService _gameService;
-    private readonly ILogger<GameController> _logger;
-
-    public GameController(IGameService gameService, ILogger<GameController> logger) => (this._gameService, this._logger) = (gameService, logger);
-
     [HttpPost("new")]
     public async Task<ActionResult<GameData>> CreateNewGameAsync([FromBody] bool hardMode = false)
     {
-        await this._gameService.StartNewAsync(hardMode, this.HttpContext.RequestAborted);
-        this._logger.LogInformation("Created new game: #{uuid}", this._gameService.Data.Uuid);
-        return this.Ok(this._gameService.Data);
+        await gameService.StartNewAsync(hardMode, this.HttpContext.RequestAborted);
+        logger.LogInformation("Created new game: #{uuid}", gameService.Data.Uuid);
+        return this.Ok(gameService.Data);
     }
 
     [HttpPost("{uuid}/guess")]
     public async Task<ActionResult<Color[]>> EnterGuessAsync(string uuid, [FromBody] string guess)
     {
-        if (this.ValidateUuid(uuid) is { } result)
-        {
-            return result;
-        }
-        return await this._gameService.AddGuessAsync(guess, this.HttpContext.RequestAborted);
+        return this.ValidateUuid(uuid) is { } result
+            ? result
+            : await gameService.AddGuessAsync(guess, this.HttpContext.RequestAborted);
     }
 
     [HttpGet]
-    public ActionResult<GameData> GetGameData() => this.Ok(this._gameService.Data);
+    public ActionResult<GameData> GetGameData() => this.Ok(gameService.Data);
 
     [HttpGet("{uuid}/solution")]
     public ActionResult GetSolution(string uuid)
@@ -42,11 +35,9 @@ public sealed class GameController : ControllerBase
         {
             return result;
         }
-        if (!this._gameService.Data.IsOver)
-        {
-            return this.StatusCode(500, "Game is not over.");
-        }
-        return new OkObjectResult(this._gameService.Data.Word) { ContentTypes = { "application/json" } };
+        return gameService.Data.IsOver
+            ? new OkObjectResult(gameService.Data.Word) { ContentTypes = { "application/json" } }
+            : this.StatusCode(500, "Game is not over.");
     }
 
     [HttpPost("{uuid}/refresh")]
@@ -56,9 +47,9 @@ public sealed class GameController : ControllerBase
         {
             return result;
         }
-        await this._gameService.RenderAsync(this.HttpContext.RequestAborted);
+        await gameService.RenderAsync(this.HttpContext.RequestAborted);
         return this.Ok();
     }
 
-    private ActionResult? ValidateUuid(string uuid) => this._gameService.Data.Uuid == uuid ? null : this.StatusCode(500, "Incorrect uuid.");
+    private ObjectResult? ValidateUuid(string uuid) => gameService.Data.Uuid == uuid ? null : this.StatusCode(500, "Incorrect uuid.");
 }

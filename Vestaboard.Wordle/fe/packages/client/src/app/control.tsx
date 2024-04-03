@@ -9,7 +9,7 @@ import {
   NavbarGroup,
   NavbarHeading,
   Position,
-  Toaster,
+  OverlayToaster,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -47,7 +47,7 @@ export const control: FunctionComponent<AppProps> = ({
   requestRender,
   startNewGame,
 }) => {
-  const toaster = useRef<Toaster>(null);
+  const toaster = useRef<OverlayToaster>(null);
   const [dismissedDialog, setDismissedDialog] = useState(false);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export const control: FunctionComponent<AppProps> = ({
       </Navbar>
       <Board />
       <OnScreenKeyboard />
-      <Toaster position={Position.TOP_RIGHT} ref={toaster} />
+      <OverlayToaster position={Position.TOP_RIGHT} ref={toaster} />
       <Dialog
         className={Classes.DARK}
         isOpen={!!word && !dismissedDialog}

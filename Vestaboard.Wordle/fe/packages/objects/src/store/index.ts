@@ -1,24 +1,16 @@
-import { composeWithDevToolsLogOnlyInProduction } from '@redux-devtools/extension';
-import {
-  applyMiddleware,
-  combineReducers,
-  legacy_createStore as createStore,
-  Middleware,
-  Store,
-} from 'redux';
+import { combineReducers, Middleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import * as reducers from './reducers';
 import rootSaga from './sagas';
-import { StoreState } from './shapes';
 
 export function createDataStore() {
   const sagaMiddleware = createSagaMiddleware();
-  const composeEnhancers = composeWithDevToolsLogOnlyInProduction({});
   const middleware = [sagaMiddleware as Middleware];
-  const store: Store<StoreState> = createStore(
-    combineReducers(reducers),
-    composeEnhancers(applyMiddleware<any, StoreState>(...middleware))
-  );
+  const store = configureStore({
+    reducer: combineReducers(reducers),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middleware),
+  });
   sagaMiddleware.run(rootSaga);
   return store;
 }

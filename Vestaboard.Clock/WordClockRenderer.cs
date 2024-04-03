@@ -6,7 +6,7 @@ using Vestaboard.Common;
 
 namespace Vestaboard.Clock;
 
-internal sealed class WordClockRenderer : IClockRenderer
+internal sealed class WordClockRenderer(IBoardClient boardClient) : IClockRenderer
 {
     private static readonly Dictionary<int, string> _text = new()
     {
@@ -32,24 +32,17 @@ internal sealed class WordClockRenderer : IClockRenderer
         [20] = "twenty",
     };
 
-    private readonly IBoardClient _boardClient;
-
-    public WordClockRenderer(IBoardClient boardClient)
-    {
-        this._boardClient = boardClient;
-    }
-
     public Task RenderTimeAsync(TimeOnly time, CancellationToken cancellationToken = default)
     {
-        BoardCharacter[][] output = new[]
-        {
+        BoardCharacter[][] output =
+        [
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22]
-        };
+        ];
         string text = WordClockRenderer.ComposeSentence(time);
         int row = 0; // output row index
         int column = 0; // output column index
@@ -78,7 +71,7 @@ internal sealed class WordClockRenderer : IClockRenderer
         {
             Fill(output[row].AsSpan());
         }
-        return this._boardClient.PostMessageAsync(output, cancellationToken);
+        return boardClient.PostMessageAsync(output, cancellationToken);
 
         void Fill(Span<BoardCharacter> span) => span.Fill(row % 2 is 0 ? BoardCharacter.White : BoardCharacter.ParisBlue);
     }
@@ -91,12 +84,12 @@ internal sealed class WordClockRenderer : IClockRenderer
         {
             0 => $"{WordClockRenderer._text[displayedHour]} o'clock",
             1 => $"one minute past {WordClockRenderer._text[displayedHour]}",
-            15 => $"quarter past {WordClockRenderer._text[displayedHour]}",
+            15 => $"a quarter past {WordClockRenderer._text[displayedHour]}",
             < 21 => $"{WordClockRenderer._text[time.Minute]} minutes past {WordClockRenderer._text[displayedHour]}",
             < 30 => $"twenty {WordClockRenderer._text[time.Minute % 10]} minutes past {WordClockRenderer._text[displayedHour]}",
             30 => $"half past {WordClockRenderer._text[displayedHour]}",
             < 40 => $"twenty {WordClockRenderer._text[(60 - time.Minute) % 10]} minutes to {WordClockRenderer._text[displayedHour]}",
-            45 => $"quarter to {WordClockRenderer._text[displayedHour]}",
+            45 => $"a quarter to {WordClockRenderer._text[displayedHour]}",
             59 => $"one minute to {WordClockRenderer._text[displayedHour]}",
             _ => $"{WordClockRenderer._text[60 - time.Minute]} minutes to {WordClockRenderer._text[displayedHour]}",
         }} {hour switch

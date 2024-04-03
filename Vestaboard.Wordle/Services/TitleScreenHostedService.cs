@@ -5,24 +5,19 @@ using Vestaboard.Common;
 
 namespace Vestaboard.Wordle.Services;
 
-internal sealed class TitleScreenHostedService : IHostedService
+internal sealed class TitleScreenHostedService(IBoardClient boardClient) : IHostedService
 {
-    private readonly IBoardClient _boardClient;
-
-    public TitleScreenHostedService(IBoardClient boardClient) => this._boardClient = boardClient;
-
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        return this._boardClient.PostMessageAsync(
-            new BoardCharacter[][]
-            {
+        return boardClient.PostMessageAsync(
+            [
                 FilledRow(0),
                 MiddleRow(1),
                 MiddleRow(2, "Vestaboard"),
                 MiddleRow(3, "Wordle"),
                 MiddleRow(4),
                 FilledRow(5),
-            },
+            ],
             cancellationToken
         );
 

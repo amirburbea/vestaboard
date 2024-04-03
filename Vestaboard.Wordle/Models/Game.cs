@@ -7,19 +7,13 @@ using Vestaboard.Wordle.Services;
 
 namespace Vestaboard.Wordle.Models;
 
-internal sealed class Game
+internal sealed class Game(IWordRepository wordRepository)
 {
     private readonly List<Color[]> _colors = new(6);
     private readonly List<string> _guesses = new(6);
-    private readonly int _index;
-    private readonly Dictionary<char, Color> _keyColors = new();
-    private readonly IWordRepository _wordRepository;
+    private readonly int _index = RandomNumberGenerator.GetInt32(0, wordRepository.Words.Count);
+    private readonly Dictionary<char, Color> _keyColors = [];
     private bool _hardMode;
-
-    public Game(IWordRepository wordRepository)
-    {
-        this._index = RandomNumberGenerator.GetInt32(0, (this._wordRepository = wordRepository).Words.Count);
-    }
 
     public IReadOnlyCollection<Color[]> Colors => this._colors;
 
@@ -48,7 +42,7 @@ internal sealed class Game
 
     public string Uuid { get; } = Guid.NewGuid().ToString();
 
-    public string Word => this._wordRepository.Words[this._index];
+    public string Word => wordRepository.Words[this._index];
 
     public Color[] AddGuess(string guess)
     {
@@ -207,7 +201,7 @@ internal sealed class Game
         {
             throw new ArgumentException($"Guess {guess} was already made.", nameof(guess));
         }
-        if (!this._wordRepository.IsValidGuess(guess))
+        if (!wordRepository.IsValidGuess(guess))
         {
             throw new ArgumentException("Guess must be a valid 5 character word.", nameof(guess));
         }
@@ -217,7 +211,7 @@ internal sealed class Game
         }
         Color[] previousColors = this._colors[^1];
         string previousGuess = this._guesses[^1];
-        Dictionary<char, int> yellowCounts = new();
+        Dictionary<char, int> yellowCounts = [];
         for (int i = 0; i < guess.Length; i++)
         {
             char character = previousGuess[i];

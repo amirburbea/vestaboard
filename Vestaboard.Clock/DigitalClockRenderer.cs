@@ -6,9 +6,9 @@ using Vestaboard.Common;
 
 namespace Vestaboard.Clock;
 
-internal sealed class DigitalClockRenderer : IClockRenderer
+internal sealed class DigitalClockRenderer(IBoardClient boardClient) : IClockRenderer
 {
-    private static readonly Number[] _numbers = {
+    private static readonly Number[] _numbers = [
         new Zero(),
         new One(),
         new Two(),
@@ -19,33 +19,26 @@ internal sealed class DigitalClockRenderer : IClockRenderer
         new Seven(),
         new Eight(),
         new Nine()
-    };
-
-    private readonly IBoardClient _boardClient;
-
-    public DigitalClockRenderer(IBoardClient boardClient)
-    {
-        this._boardClient = boardClient;
-    }
+    ];
 
     public Task RenderTimeAsync(TimeOnly time, CancellationToken cancellationToken)
     {
-        BoardCharacter[][] output = new[]
-        {
+        BoardCharacter[][] output =
+        [
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22],
             new BoardCharacter[22]
-        };
+        ];
         RenderValue(time.Hour, 0);
         RenderColon(0);
         RenderColon(1);
         RenderColon(3);
         RenderColon(4);
         RenderValue(time.Minute, 13);
-        return this._boardClient.PostMessageAsync(output, cancellationToken);
+        return boardClient.PostMessageAsync(output, cancellationToken);
 
         void RenderColon(int row) => output[row][10] = output[row][11] = BoardCharacter.White;
 

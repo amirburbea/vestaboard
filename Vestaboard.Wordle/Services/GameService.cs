@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Vestaboard.Common;
 using Vestaboard.Wordle.Models;
 
@@ -19,20 +18,9 @@ public interface IGameService
     Task StartNewAsync(bool hardMode = false, CancellationToken cancellationToken = default);
 }
 
-internal sealed class GameService : IGameService
+internal sealed class GameService(IBoardClient client, IWordRepository wordRepository) : IGameService
 {
-    private readonly IBoardClient _client;
-    private readonly ILogger<GameService> _logger;
-    private readonly IWordRepository _wordRepository;
-    private Game _game;
-
-    public GameService(IBoardClient client, IWordRepository wordRepository, ILogger<GameService> logger)
-    {
-        this._wordRepository = wordRepository;
-        this._client = client;
-        this._logger = logger;
-        this._game = this.CreateNew();
-    }
+    private Game _game = new(wordRepository);
 
     public GameData Data => new(this._game);
 
@@ -47,7 +35,7 @@ internal sealed class GameService : IGameService
 
     public Task RenderAsync(CancellationToken cancellationToken)
     {
-        return this._client.PostMessageAsync(this._game.ToArray(this.OnScreenKeyboard), cancellationToken);
+        return client.PostMessageAsync(this._game.ToArray(this.OnScreenKeyboard), cancellationToken);
     }
 
     public Task StartNewAsync(bool hardMode, CancellationToken cancellationToken)
@@ -56,5 +44,5 @@ internal sealed class GameService : IGameService
         return this.RenderAsync(cancellationToken);
     }
 
-    private Game CreateNew(bool hardMode = false) => new(this._wordRepository) { HardMode = hardMode };
+    private Game CreateNew(bool hardMode = false) => new(wordRepository) { HardMode = hardMode };
 }

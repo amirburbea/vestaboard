@@ -14,18 +14,12 @@ public interface IBoardClient
     Task<bool> PostMessageAsync(BoardCharacter[][] characters, CancellationToken cancellationToken = default);
 }
 
-public sealed class BoardClient : IBoardClient, IDisposable
+public sealed class BoardClient(HttpMessageHandler messageHandler, IConfiguration configuration) : IBoardClient, IDisposable
 {
     private static readonly MediaTypeHeaderValue _jsonContentType = MediaTypeHeaderValue.Parse("application/json");
 
-    private readonly HttpClient _httpClient;
-    private readonly string _localApiKey;
-
-    public BoardClient(HttpMessageHandler messageHandler, IConfiguration configuration)
-    {
-        this._httpClient = new(messageHandler);
-        this._localApiKey = configuration["LOCAL_API_KEY"] ?? throw new ArgumentException("Configuration does not contain local api key.", nameof(configuration));
-    }
+    private readonly HttpClient _httpClient = new(messageHandler);
+    private readonly string _localApiKey = configuration["LOCAL_API_KEY"] ?? throw new ArgumentException("Configuration does not contain local api key.", nameof(configuration));
 
     public void Dispose() => _httpClient.Dispose();
 
