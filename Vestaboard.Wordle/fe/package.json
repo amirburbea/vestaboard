@@ -9,7 +9,7 @@
     "build": "yarn pre-build && yarn workspace @vestaboard-wordle/client run webpack",
     "clean": "yarn workspaces run clean && shx rm -rf out",
     "prettier": "pretty-quick",
-    "debug": "yarn workspaces run debug"
+    "debug": "yarn workspace @vestaboard-wordle/client run debug"
   },
   "keywords": [
     "vestaboard",

@@ -74,9 +74,12 @@ function config(env) {
       historyApiFallback: true,
       port: 8080,
       host: 'localhost',
-      proxy: {
-        '/api': { target: 'http://localhost:1234' },
-      },
+      proxy: [
+        {
+          context: ['/api'],
+          target: 'http://localhost:1234',
+        },
+      ],
     },
     module: {
       rules: [
@@ -161,15 +164,13 @@ function createCssUse(sass = false, modules = false) {
         },
       },
     },
-    sass
-      ? {
-          loader: 'sass-loader',
-          options: {
-            // Prefer `sass` but not working w/ bp3
-            implementation: require('node-sass'),
-          },
-        }
-      : undefined,
+    sass && {
+      loader: 'sass-loader',
+      options: {
+        // Prefer `sass` but not working w/ bp3
+        implementation: require('node-sass'),
+      },
+    },
   ]);
 }
 
