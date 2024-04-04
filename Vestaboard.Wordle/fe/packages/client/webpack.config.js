@@ -1,6 +1,4 @@
-const { compact } = require('lodash');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { join } = require('path');
@@ -11,6 +9,11 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 /** @typedef { import('webpack-dev-server').Configuration } WebpackDevServerConfig */
 
 const outPath = join(__dirname, '../../out');
+
+/** @template [T=object] */
+function compact(/** @type T[] */ array) {
+  return array.filter(item => !!item);
+}
 
 function config(env) {
   const isProd = env['NODE_ENV'] === 'prod';
@@ -85,9 +88,8 @@ function config(env) {
             options: {
               cacheDirectory: true,
               babelrc: false,
-              presets: [['@babel/preset-env', { targets: { chrome: '100' } }]],
+              presets: [['@babel/preset-env', { targets: { chrome: '123' } }]],
               plugins: compact([
-                'lodash',
                 '@babel/plugin-syntax-dynamic-import',
                 '@babel/plugin-transform-optional-chaining',
                 ['@babel/plugin-transform-class-properties', { loose: true }],
@@ -134,11 +136,6 @@ function config(env) {
       new MiniCssExtractPlugin({
         chunkFilename: '[name].css',
         filename: '[name].css',
-      }),
-      new LodashModuleReplacementPlugin({
-        collections: true,
-        paths: true,
-        flattening: true,
       }),
       new HtmlWebpackPlugin({
         template: join(__dirname, 'index.ejs'),

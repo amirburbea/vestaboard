@@ -1,9 +1,12 @@
-import { last } from 'lodash';
 import { Action } from 'redux-actions';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { Color, ColorRow, GameData } from '../../contracts';
 import * as actions from '../actions';
-import { GAME_START_NEW, GAME_SUBMIT_GUESS } from '../actionTypes/game';
+import {
+  GAME_REFRESH_DATA,
+  GAME_START_NEW,
+  GAME_SUBMIT_GUESS,
+} from '../actionTypes/game';
 import * as selectors from '../selectors';
 import fetchData from './fetchData';
 
@@ -19,6 +22,7 @@ const {
 export default function* () {
   yield call(refreshGameData);
   yield takeEvery(GAME_SUBMIT_GUESS, submitGuess);
+  yield takeEvery(GAME_REFRESH_DATA, refreshGameData);
   yield takeEvery(GAME_START_NEW, startNewGame);
 }
 
@@ -30,7 +34,7 @@ function* refreshGameData() {
   const data: GameData = yield call(fetchData);
   if (!data.word && GameData.isOver(data)) {
     data.word = GameData.isSolved(data)
-      ? last(data.guesses)
+      ? data.guesses.at(-1)
       : yield call(requestSolution, data.uuid);
   }
   yield put(setData(data));

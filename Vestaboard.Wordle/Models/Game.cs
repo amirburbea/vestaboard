@@ -132,10 +132,13 @@ internal sealed class Game(IWordRepository wordRepository)
                 Color[] colors = this._colors[rowIndex];
                 for (int i = 0; i < 5; i++)
                 {
-                    row[6 + i] = Game.GetCharacter(colors[i]);
+                    Color color = colors[i];
+                    row[6 + i] = color is Color.None
+                        ? BoardCharacter.White
+                        : Game.GetCharacter(color);
                 }
             }
-            row[5] = row[11] = BoardCharacter.White;
+            row[5] = row[11] = BoardCharacter.Blank;
             return row;
         }
 
@@ -150,7 +153,7 @@ internal sealed class Game(IWordRepository wordRepository)
                 row[12 + 2 * index] = BoardCharacters.Map[character];
                 row[13 + 2 * index] = this._keyColors.TryGetValue(character, out Color color)
                     ? color is Color.None
-                        ? BoardCharacter.PoppyRed
+                        ? BoardCharacter.White
                         : Game.GetCharacter(color)
                     : BoardCharacter.Hyphen;
             }

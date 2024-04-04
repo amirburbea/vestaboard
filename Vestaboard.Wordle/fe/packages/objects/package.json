@@ -14,14 +14,12 @@
   "dependencies": {
     "@redux-devtools/extension": "^3.2.3",
     "@reduxjs/toolkit": "^2.2.3",
-    "lodash": "^4.17.21",
     "redux": "^5.0.1",
     "redux-actions": "^3.0.0",
     "redux-saga": "^1.2.1",
     "reselect": "^5.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.186",
     "@types/node": "^20.12.3",
     "@types/redux-actions": "^2.6.2",
     "shx": "^0.3.4",
