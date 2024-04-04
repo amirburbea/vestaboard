@@ -22,12 +22,12 @@ export const control: FunctionComponent<OnScreenKeyboardProps> = ({
   pressEnterKey,
   pressKey,
 }) => {
+  /** The keys that can be pressed at the current state. */
   const pressable = useMemo((): Keys => {
     if (isGameOver) {
       return Keys.none;
     }
-    const value = entryLength === 5 ? Keys.enter : Keys.key;
-    return entryLength ? value | Keys.backspace : value;
+    return (entryLength && Keys.backspace) | (entryLength === 5 ? Keys.enter : Keys.key);
   }, [isGameOver, entryLength]);
 
   const hotKeysConfig = useMemo(
@@ -50,10 +50,10 @@ export const control: FunctionComponent<OnScreenKeyboardProps> = ({
           global: true,
           label: key,
           onKeyDown: hasFlag(pressable, Keys.key) ? () => pressKey(key) : undefined,
-        })
+        }),
       ),
     ],
-    [pressable, pressKey, pressBackspace, pressEnterKey]
+    [pressable, pressKey, pressBackspace, pressEnterKey],
   );
 
   return (

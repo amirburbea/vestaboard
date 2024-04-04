@@ -1,6 +1,7 @@
 import { Color, ColorRow } from './color';
 import { Dictionary } from './dictionary';
 
+/** JSON format for Game data. */
 export interface GameData {
   colors: readonly ColorRow[];
   guesses: readonly string[];
@@ -19,6 +20,6 @@ export namespace GameData {
 
   /** Checks if the game is solved (meaning the last row of colors is all green). */
   export function isSolved({ colors }: Pick<GameData, 'colors'>) {
-    return !!colors.length && colors[colors.length - 1].every(c => c === Color.green);
+    return !!colors.length && colors.at(-1)!.every(c => c === Color.green);
   }
 }

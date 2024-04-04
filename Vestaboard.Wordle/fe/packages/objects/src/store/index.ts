@@ -1,15 +1,15 @@
-import { combineReducers, Middleware } from 'redux';
+import { combineReducers, Reducer, Store } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import * as reducers from './reducers';
 import rootSaga from './sagas';
+import { StoreState } from './shapes';
 
-export function createDataStore() {
+export function createDataStore(): Store<StoreState> {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [sagaMiddleware as Middleware];
   const store = configureStore({
-    reducer: combineReducers(reducers),
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middleware),
+    reducer: combineReducers(reducers) as unknown as Reducer<StoreState>,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat([sagaMiddleware]),
   });
   sagaMiddleware.run(rootSaga);
   return store;

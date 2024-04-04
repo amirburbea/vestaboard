@@ -5,12 +5,11 @@
   "description": "Wordle for Vestaboard",
   "scripts": {
     "transpile": "tsc -b packages/tsconfig.json",
-    "pre-build": "lerna run build --stream && yarn transpile && lerna run --parallel --stream copyfiles && shx rm -rf out",
-    "build": "yarn pre-build && lerna run webpack --stream",
-    "clean": "lerna run clean --parallel && shx rm -rf out",
+    "pre-build": "yarn workspaces run build && yarn transpile && yarn workspace @vestaboard-wordle/client run copyfiles && shx rm -rf out",
+    "build": "yarn pre-build && yarn workspace @vestaboard-wordle/client run webpack",
+    "clean": "yarn workspaces run clean && shx rm -rf out",
     "prettier": "pretty-quick",
-    "webpack:prod": "lerna run build:prod && lerna run copyfiles --stream && lerna run webpack:prod --stream",
-    "debug": "lerna run debug --stream"
+    "debug": "yarn workspaces run debug"
   },
   "keywords": [
     "vestaboard",
@@ -32,7 +31,6 @@
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "husky": "^9.0.11",
-    "lerna": "^8.1.2",
     "prettier": "^3.2.5",
     "pretty-quick": "^4.0.0",
     "shx": "^0.3.4",

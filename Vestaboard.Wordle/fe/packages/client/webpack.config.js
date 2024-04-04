@@ -14,7 +14,7 @@ const outPath = join(__dirname, '../../out');
 
 function config(env) {
   const isProd = env['NODE_ENV'] === 'prod';
-  const hot = true;//env['HMR_HOT'] === 'true';
+  const hot = true; //env['HMR_HOT'] === 'true';
   /** @type {WebpackConfig & {devServer: WebpackDevServerConfig}} */
   const config = {
     context: __dirname,
@@ -89,9 +89,9 @@ function config(env) {
               plugins: compact([
                 'lodash',
                 '@babel/plugin-syntax-dynamic-import',
-                '@babel/plugin-proposal-optional-chaining',
-                ['@babel/plugin-proposal-class-properties', { loose: true }],
-                ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
+                '@babel/plugin-transform-optional-chaining',
+                ['@babel/plugin-transform-class-properties', { loose: true }],
+                ['@babel/plugin-transform-object-rest-spread', { loose: true }],
                 ['transform-react-remove-prop-types', { mode: 'wrap' }],
                 !isProd && 'react-refresh/babel',
               ]),
