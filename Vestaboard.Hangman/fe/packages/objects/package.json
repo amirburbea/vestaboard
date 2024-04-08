@@ -1,7 +1,7 @@
 {
-  "name": "@vestaboard-wordle/objects",
+  "name": "@vestaboard-hangman/objects",
   "version": "1.0.0",
-  "description": "Vestaboard Wordle Objects",
+  "description": "Vestaboard Hangman Objects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

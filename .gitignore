@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Client project.
 !Vestaboard.Wordle/fe/**
+!Vestaboard.Hangman/fe/**

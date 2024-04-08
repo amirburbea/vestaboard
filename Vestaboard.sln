@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vestaboard.Hangman", "Vestaboard.Hangman\Vestaboard.Hangman.csproj", "{9C70C097-A433-4590-8E06-52DD5C9916A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{A769B70C-8B20-4090-BB8B-26D704B761F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A769B70C-8B20-4090-BB8B-26D704B761F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A769B70C-8B20-4090-BB8B-26D704B761F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C70C097-A433-4590-8E06-52DD5C9916A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C70C097-A433-4590-8E06-52DD5C9916A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C70C097-A433-4590-8E06-52DD5C9916A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C70C097-A433-4590-8E06-52DD5C9916A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

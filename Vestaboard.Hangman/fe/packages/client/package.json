@@ -1,5 +1,5 @@
 {
-  "name": "@vestaboard-wordle/client",
+  "name": "@vestaboard-hangman/client",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@blueprintjs/core": "^5.10.1",
     "@blueprintjs/icons": "^5.9.0",
-    "@vestaboard-wordle/objects": "*",
+    "@vestaboard-hangman/objects": "*",
     "classnames": "^2.3.2",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",

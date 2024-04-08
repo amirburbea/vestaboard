@@ -1,0 +1,41 @@
+{
+  "name": "vestaboard-hangman",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Hangman for Vestaboard",
+  "scripts": {
+    "transpile": "tsc -b packages/tsconfig.json",
+    "pre-build": "yarn workspaces run build && yarn transpile && yarn workspace @vestaboard-hangman/client run copyfiles && shx rm -rf out",
+    "build": "yarn pre-build && yarn workspace @vestaboard-hangman/client run webpack",
+    "clean": "yarn workspaces run clean && shx rm -rf out",
+    "prettier": "pretty-quick",
+    "debug": "yarn workspace @vestaboard-hangman/client run debug"
+  },
+  "keywords": [
+    "vestaboard",
+    "hangman"
+  ],
+  "author": "Amir Burbea <amir.burbea@gmail.com>",
+  "license": "ISC",
+  "workspaces": [
+    "packages/*"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "pretty-quick": "^4.0.0",
+    "shx": "^0.3.4",
+    "typescript": "^5.4.3",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

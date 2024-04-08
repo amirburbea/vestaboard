@@ -21,7 +21,6 @@ public static class WebHostConfiguration
     public static void ConfigureWebHost(
         IWebHostBuilder builder,
         Assembly assembly,
-        string portSettingKey = "PORT",
         int defaultPort = 1234,
         Action<WebHostBuilderContext, IApplicationBuilder>? configureApplication = null
     )
@@ -30,7 +29,7 @@ public static class WebHostConfiguration
             .ConfigureKestrel(options =>
             {
                 options.AddServerHeader = false;
-                options.ListenAnyIP(builder.GetSetting(portSettingKey) is { Length: > 0 } text ? int.Parse(text) : defaultPort);
+                options.ListenAnyIP(builder.GetSetting("PORT") is { Length: > 0 } text ? int.Parse(text) : defaultPort);
             })
             .ConfigureServices(services =>
             {
