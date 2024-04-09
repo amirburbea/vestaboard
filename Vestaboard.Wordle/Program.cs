@@ -1,4 +1,5 @@
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,7 @@ internal static class Program
         using IHost host = HostBuilderFactory.CreateHostBuilder()
             .ConfigureWebHostDefaults(builder => WebHostConfiguration.ConfigureWebHost(
                 builder,
-                typeof(Program).Assembly,
+                Assembly.GetExecutingAssembly(),
                 configureApplication: (context, builder) =>
                 {
                     PhysicalFileProvider fileProvider = new(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "fe/out")));
