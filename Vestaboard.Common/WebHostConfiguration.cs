@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
@@ -34,22 +35,24 @@ public static class WebHostConfiguration
             .ConfigureServices(services =>
             {
                 services
-                   .AddMvcCore(options =>
-                   {
-                       options.AllowEmptyInputInBodyModelBinding = true;
-                       options.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
-                   })
-                   .AddApplicationPart(assembly)
-                   .AddJsonOptions(options => WebHostConfiguration.ConfigureJsonOptions(options.JsonSerializerOptions))
-                   .AddCors(options => options.AddPolicy(nameof(CorsPolicy), builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+                    .AddMvcCore(options =>
+                    {
+                        options.AllowEmptyInputInBodyModelBinding = true;
+                        options.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+                    })
+                    .AddApplicationPart(assembly)
+                    .AddJsonOptions(options => WebHostConfiguration.ConfigureJsonOptions(options.JsonSerializerOptions))
+                    .AddCors(options => options.AddPolicy(nameof(CorsPolicy), builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
             })
             .Configure((context, builder) =>
             {
                 builder
                     .UseExceptionHandler(builder => builder.Run(async context =>
                     {
-                        Exception exception = context.Features.Get<IExceptionHandlerPathFeature>()!.Error;
-                        await context.Response.WriteAsync(exception.Message, context.RequestAborted);
+                        if (context.Features.Get<IExceptionHandlerPathFeature>() is { Error.Message: { } message })
+                        {
+                            await context.Response.WriteAsync(message, context.RequestAborted);
+                        }
                     }))
                     .UseRouting()
                     .UseEndpoints(endpoints => endpoints.MapControllers())

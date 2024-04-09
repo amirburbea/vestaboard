@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 using Vestaboard.Common;
 using Vestaboard.Hangman.Services;
 
@@ -18,7 +19,7 @@ internal static class Program
         using IHost host = HostBuilderFactory.CreateHostBuilder()
             .ConfigureWebHostDefaults(builder => WebHostConfiguration.ConfigureWebHost(
                 builder,
-                typeof(Program).Assembly,
+                Assembly.GetExecutingAssembly(),
                 configureApplication: (context, builder) =>
                 {
                     PhysicalFileProvider fileProvider = new(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "fe/out")));
