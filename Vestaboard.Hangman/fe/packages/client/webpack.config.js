@@ -168,7 +168,7 @@ function createCssUse(sass = false, modules = false) {
       loader: 'sass-loader',
       options: {
         // Prefer `sass` but not working w/ bp3
-        implementation: require('node-sass'),
+        implementation: require('sass'),
       },
     },
   ]);

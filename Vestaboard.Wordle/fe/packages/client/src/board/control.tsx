@@ -3,7 +3,7 @@ import { ColorRow } from '@vestaboard-wordle/objects';
 import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import getIntent from '../getIntent';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 export interface BoardProps {
   colors: readonly ColorRow[];

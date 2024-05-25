@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { Board } from '../board';
 import { OnScreenKeyboard } from '../onScreenKeyboard';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 export interface AppProps {
   error?: string;
