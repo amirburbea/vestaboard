@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Color, Dictionary } from '@vestaboard-wordle/objects';
 import { FunctionComponent, useMemo } from 'react';
 import getIntent from '../getIntent';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 export type OnScreenKeyboardProps = {
   entryLength: number;
